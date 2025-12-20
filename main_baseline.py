@@ -31,12 +31,18 @@ def parse_args() -> argparse.Namespace:
 
 def resolve_device(choice: str) -> torch.device:
     if choice == "cpu":
+        print("Using CPU for inference.")
         return torch.device("cpu")
     if choice == "cuda":
+        print("Using CUDA for inference.")
         if not torch.cuda.is_available():
             raise RuntimeError("CUDA requested but not available.")
         return torch.device("cuda")
     # auto
+    if torch.cuda.is_available():
+        print("CUDA is available. Using CUDA for inference.")
+    else:
+        print("CUDA is not available. Using CPU for inference.")
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
